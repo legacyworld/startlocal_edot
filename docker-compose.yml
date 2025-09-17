@@ -1,0 +1,21 @@
+services:
+  redis:
+    image: redis
+    container_name: redis-svc
+    ports:
+      - 6379:6379
+  flask11:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: otel
+    env_file:
+      - .env
+    command: opentelemetry-instrument python -u /src/edot.py
+    ports:
+      - 5011:5011
+    volumes:
+      - ./:/src
+    depends_on:
+      - redis
+
